@@ -4,8 +4,18 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+//load environment variables from .env (.env is the default file)
+require("dotenv").config();
+const PORT = process.env.PORT || 5002;
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const taskRouter = require('./routes/tasks')
+
+//connecting to mongo db 
+var { mongooseConnect } = require('./mongoose');
+mongooseConnect();
+
 
 var app = express();
 
@@ -19,8 +29,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/tasks', taskRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,5 +51,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`) })
 
 module.exports = app;
