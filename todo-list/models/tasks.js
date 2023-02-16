@@ -25,7 +25,7 @@ const toDoSchema = new mongoose.Schema({
     dateCreated: { type: Date, default: Date.now(),
     required: true},
     dateCompleted: {type: Date},
-    id: { type: String, default: uuidv4()},
+    id: { type: String, default: uuidv4},
 
 })
 
