@@ -10,20 +10,27 @@ const {v4: uuidv4} = require("uuid");
 // status - type: string, default: 'incomplete', validation: required, enum: ['incomplete', 'complete', 'deferred']
 
 
-const taskSchema = new mongoose.Schema({
+const toDoSchema = new mongoose.Schema({
 
-    taskName: String,
+    taskName: {type: String,
+    required: true},
     description: String,
-    completed: Boolean,
-    status: { type: String, default: 'incomplete'},
-    dateCreated: { type: Date, default: Date.now},
+    completed: {type: Boolean,
+    required: true,
+    default: false},
+    status: { type: String, 
+    enum: ['incomplete', 'complete', 'deferred'],
+    default: 'incomplete',
+    },
+    dateCreated: { type: Date, default: Date.now(),
+    required: true},
     dateCompleted: {type: Date},
     id: { type: String, default: uuidv4()},
 
 })
 
 //register model
-const Task = mongoose.model('task_list',taskSchema)
+const Task = mongoose.model('task_list',toDoSchema)
 
 
 

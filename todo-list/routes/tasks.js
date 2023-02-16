@@ -6,6 +6,13 @@ var router = express.Router();
 const taskscontroller = require('../controllers/taskscontrollers');
 
 router.get('/all', taskscontroller.getAllTask)
-router.post('/create-one', taskscontroller.createTask)
+router.post('/create-task', taskscontroller.createTask)
+router.put('/update-task', taskscontroller.updateTask)
+router.delete('/delete-task', taskscontroller.deleteOneTask);
+router.delete('/delete-multi', taskscontroller.deleteMultiple)
+router.post('/create-multi', taskscontroller.createMultiple)
+
+
+
 
 module.exports = router;

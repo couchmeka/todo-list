@@ -1,5 +1,8 @@
+const { update } = require('../models/Tasks');
 const Task = require('../models/Tasks');
 
+
+//get all tasks
 async function getAllTask(req, res) {
 
     //query tasks
@@ -11,6 +14,9 @@ async function getAllTask(req, res) {
     }
 };
 
+
+
+//create a task
 async function createTask(req, res) {
     try {
       //parse out fields from POST request
@@ -58,13 +64,110 @@ taskName: String,
 };
 
 
+//update tasks
+async function updateTask (req, res) {
+    const entryID = req.body.id;
+
+    
+    try{
+            await Task.updateOne({id: entryID}, req.body);
+    
+    if ( req.body.completed === true)
+    {
+
+    const filter = { id: entryID };
+    const update = { dateCompleted: Date.now() };
+
+// update document with the date completed
+    let doc = await Task.findOneAndUpdate(filter, update);
+    doc.id;
+    doc.dateCompleted;            
+    }
+    
+    } catch(err) {
+    
+        console.log(err)
+        throw err
+    }
+    
+    res.json ({
+        success: true,
+        message: `Task ${entryID} has been updated`
+    })
+    
+    };
+
+
+ //delete a task   
+ async function deleteOneTask(req, res) {
+    const entryId = req.body.id;
+
+    try {
+        await Task.deleteOne({id: entryId});
+    } catch (err) {
+        console.log(err);
+        throw err;  
+    }
+
+    res.json({
+        success: true,
+        message: `blog entry id ${entryId} deleted`
+    })
+};
+
+
+//delete multiple tasks
+async function deleteMultiple(req, res) {
+	try {
+      
+      const idsToDelete = req.query.id
+
+      const deleteResult = await Task.deleteMany({id:
+          idsToDelete
+        })
+  
+  } catch (e) {
+    res.send(e);
+  }
+
+	res.json({
+		success: true,
+        deletedResult: idsToDelete
+        
+	})
+}
+
+async function createMultiple (req, res){
+
+   try {
+
+    let createMulti = await Task.create(
+        req.body
+          )
+
+    return createMulti
+
+   } catch (e) {
+    res.send(e);
+   }
+
+   res.json({
+
+    sucess:true
+    
+   })
+    
 
 
 
-
+}
 
 module.exports = {
 getAllTask,
-createTask
+createTask,
+updateTask,
+deleteOneTask,
+deleteMultiple,
+createMultiple
 
 }
